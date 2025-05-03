@@ -1,0 +1,10 @@
+repos:
+-   repo: https://github.com/PyCQA/pylint
+    rev: v3.0.3
+    hooks:
+    -   id: pylint
+        additional_dependencies: []
+        args: [--exit-zero]
+        types: [python]
+        exclude: ^tests/
+        fail-fast: false
