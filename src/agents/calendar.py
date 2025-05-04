@@ -1,6 +1,6 @@
 from .base import BaseAgent
 from typing import Any, ClassVar
-import datetime
+from datetime import datetime
 
 
 class CalendarAgent(BaseAgent):
