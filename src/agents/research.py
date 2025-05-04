@@ -1,15 +1,23 @@
 from .base import BaseAgent
-from typing import Any, Dict
+from typing import ClassVar
+
 
 class ResearchAgent(BaseAgent):
     """
     Gathers information from various sources.
     """
-    def handle(self, task: Dict[str, Any], context: Dict[str, Any]) -> Any:
-        web_search_api = self.tools[0]
-        if task.get("type") == "web_search":
-            query = task["query"]
-            results = web_search_api.search(query)
-            self.memory.set(f"search_{query}", results)
-            return {"status": "completed", "results": results}
-        return {"status": "ignored", "reason": "Unknown task type"}
+
+    agent_name: ClassVar[str] = "research"
+
+    @property
+    def system_prompt(self) -> str:
+        system_prompt = """You are the Research Agent in a multi-agent system.
+        Your job is to:
+        1. Find relevant information on topics
+        2. Synthesize data from multiple sources
+        3. Present findings in a clear, structured way
+        4. Identify key insights and patterns
+        
+        Always cite sources and verify information when possible.
+        """
+        return system_prompt

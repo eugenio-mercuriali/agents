@@ -1,3 +1,9 @@
+"""Agentic workflow entrypoint.
+Required for various LLM API integrations
+pip install openai llama-index-llms-openai llama-index-llms-huggingface
+pip install llama-index-llms-ollama llama-index-llms-together llama-index-llms-litellm
+"""
+
 from src.agents.planning import PlanningAgent
 from src.agents.calendar import CalendarAgent
 from src.agents.email import EmailAgent
@@ -7,7 +13,7 @@ from src.agents.task import TaskAgent
 from src.framework.llamaindex import LlamaIndexFramework
 from src.framework.orchestration import Orchestrator
 from src.framework.shared_memory import SharedMemory
-from src.foundation.llama3 import Llama3Model
+from src.foundation.llm import LLM
 from src.db.chroma import ChromaDB
 from src.api.calendar import CalendarAPI
 from src.api.email import EmailAPI
@@ -17,7 +23,7 @@ def main():
     # Initialize core components
     memory = SharedMemory()
     db = ChromaDB()
-    model = Llama3Model()
+    model = LLM()
     framework = LlamaIndexFramework(model, db)
 
     # Initialize APIs
@@ -35,12 +41,11 @@ def main():
         "task": TaskAgent("TaskAgent", memory, []),
     }
 
-    orchestrator = Orchestrator(agents, memory)
+    orchestrator = Orchestrator(model, agents, memory)
 
-    # Example: route a task
     task = {"type": "schedule_meeting", "details": "..."}
     context = {}
-    orchestrator.route(task, context)
+    orchestrator.process_user_request(task, context)
 
 if __name__ == "__main__":
     main()

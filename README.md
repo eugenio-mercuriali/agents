@@ -1,7 +1,7 @@
 # agents
 Agents making my life easier.
 
-Core Architecture Components
+Core architecture components
 1. Foundation Model: Llama 3 as the base LLM
     * Will power all agent reasoning capabilities
     * Can be run locally or via API depending on your compute resources
@@ -26,3 +26,14 @@ Core Architecture Components
     * Calendar services
     * Email providers
     * Web search capabilities
+
+### Ollama setup
+
+To run locally with Ollama:
+1. Install Ollama from https://ollama.com/download or via
+   <code> curl -fsSL https://ollama.com/install.sh | sh</code> (macOS/Linux only)
+2. Pull the llama3 (or other) model
+   <code> ollama pull llama3:8b</code>
+3. Run the Ollama server:
+   <code> ollama serve </code>
+

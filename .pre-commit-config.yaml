@@ -7,4 +7,3 @@ repos:
         args: [--exit-zero]
         types: [python]
         exclude: ^tests/
-        fail-fast: false

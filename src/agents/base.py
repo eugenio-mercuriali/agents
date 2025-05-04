@@ -1,38 +1,55 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List
 
-class BaseAgent(ABC):
+from src.db.chroma import ChromaDB
+from src.foundation.llm import LLM
+from class_registry.base import AutoRegister
+from src.register.registries import available_agents
+from llama_index.core.memory import ChatMemoryBuffer
+
+from llama_index.core.agent import ReActAgent
+from llama_index.core.tools import FunctionTool
+
+from src.connector import Connector
+from src.constants import TOKEN_LIMIT
+
+
+class BaseAgent(AutoRegister(available_agents), ABC):
     """
     Abstract base class for all agents.
     """
-    def __init__(self, name: str, memory: Any, tools: List[Any]):
-        self.name = name
-        self.memory = memory
-        self.tools = tools
+
+    connector: Connector = Connector()
+
+    def __init__(self, llm: LLM, vector_database: ChromaDB = None):
+        self.llm = llm
+        self.vector_database = vector_database
+        self._memory = None
+
+    @property
+    @abstractmethod
+    def tools(self) -> list[FunctionTool]:
+        """Tools for the agent."""
+        pass
 
     @abstractmethod
-    def handle(self, task: Dict[str, Any], context: Dict[str, Any]) -> Any:
-        """
-        Handle a task with the given context.
-        Must be implemented by subclasses.
-        """
-        raise NotImplementedError('Each agent must implement the handle method.')
+    def system_prompt(self) -> str:
+        """Agent prompt."""
+        pass
 
-class PlanningAgent(BaseAgent):
-    """
-    Coordinates workflows and breaks down tasks into subtasks.
-    """
-    def handle(self, task: Dict[str, Any], context: Dict[str, Any]) -> Any:
-        # Example: break down a high-level task into subtasks
-        if task.get("type") == "plan_workflow":
-            workflow = self._decompose_task(task["details"])
-            self.memory.set("current_workflow", workflow)
-            return {"status": "planned", "workflow": workflow}
-        return {"status": "ignored", "reason": "Unknown task type"}
+    @property
+    def memory(self) -> ChatMemoryBuffer:
+        """Memory for the agent."""
+        if self._memory is None:
+            self._memory = ChatMemoryBuffer.from_defaults(token_limit=TOKEN_LIMIT)
+        return self._memory
 
-    def _decompose_task(self, details: Any) -> list:
-        # Placeholder: Use LLM or rules to break down the task
-        # For now, just split by sentences
-        if isinstance(details, str):
-            return [step.strip() for step in details.split('.') if step.strip()]
-        return []
+    @property
+    def agent(self) -> ReActAgent:
+        """ReActAgent object."""
+        return ReActAgent.from_tools(
+            self.tools,
+            llm=self.llm,
+            memory=self.memory,
+            system_prompt=self.system_prompt,
+            verbose=True
+        )
