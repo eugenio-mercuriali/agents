@@ -20,8 +20,9 @@ class CalendarAgent(BaseAgent):
         Returns:
             Availability status and conflicts if any
         """
-        # In a real implementation, this would connect to calendar API
-        # Mock implementation for demonstration
+        # TODO: implement this logic
+        # In the actual implementation, this would connect to calendar API
+        # Mock implementation
         available = True
         conflicts = []
 
@@ -44,7 +45,8 @@ class CalendarAgent(BaseAgent):
         Returns:
             Event details
         """
-        # In a real implementation, this would connect to calendar API
+        # TODO: implement this logic
+        # In the actual implementation, this would connect to calendar API
         event_id = f"event_{hash(title + start_time)}"
 
         event = {
@@ -74,7 +76,8 @@ class CalendarAgent(BaseAgent):
         Returns:
             List of upcoming events
         """
-        # In a real implementation, this would fetch from calendar API
+        # TODO: implement this logic
+        # In the actual implementation, this would fetch from calendar API
         if "calendar_events" not in self.shared_memory:
             return []
 
