@@ -24,14 +24,14 @@ class PlanningAgent(BaseAgent):
     def system_prompt(self) -> str:
         """Planning agent prompt."""
         system_prompt = """You are the Planning Agent in a multi-agent system.
-            Your job is to:
-            1. Break down user requests into subtasks
-            2. Delegate those subtasks to specialized agents
-            3. Track progress and ensure task completion
-            4. Report results back to the user
-            
-            Always think step by step and coordinate with other agents effectively.
-            """
+        Your job is to:
+        1. Break down user requests into subtasks
+        2. Delegate those subtasks to specialized agents
+        3. Track progress and ensure task completion
+        4. Report results back to the user
+        
+        Always think step by step and coordinate with other agents effectively.
+        """
         return system_prompt
 
     @property
