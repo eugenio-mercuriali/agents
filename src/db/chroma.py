@@ -2,6 +2,7 @@ import chromadb
 from llama_index.core import VectorStoreIndex
 from llama_index.vector_stores.chroma import ChromaVectorStore
 
+
 class ChromaDB:
     """ChromaDB class."""
 

@@ -1,0 +1,30 @@
+coverage:
+  precision: 2
+  round: down
+  range: "70...100"
+  status:
+    project:
+      default:
+        target: 80%
+        threshold: 0.2%
+        base: auto
+    patch:
+      default:
+        target: 80%
+        threshold: 0.2%
+        base: auto
+        informational: true
+  ignore:
+    - "tests/*"
+    - "docs/*"
+    - "examples/*"
+    - "**/__init__.py"
+    - "**/version.py"
+    - "**/setup.py"
+    - "**/conftest.py"
+  notify:
+    slack:
+      default:
+        url: ${CODECOV_SLACK_WEBHOOK}
+        after_n_builds: 3
+        message: "Coverage changed by {{comparison}}"

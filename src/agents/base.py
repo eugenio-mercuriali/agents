@@ -1,16 +1,15 @@
 from abc import ABC, abstractmethod
 
-from src.db.chroma import ChromaDB
-from src.foundation.llm import LLM
 from class_registry.base import AutoRegister
-from src.register.registries import available_agents
-from llama_index.core.memory import ChatMemoryBuffer
-
 from llama_index.core.agent import ReActAgent
+from llama_index.core.memory import ChatMemoryBuffer
 from llama_index.core.tools import FunctionTool
 
 from src.connector import Connector
 from src.constants import TOKEN_LIMIT
+from src.db.chroma import ChromaDB
+from src.foundation.llm import LLM
+from src.register.registries import available_agents
 
 
 class BaseAgent(AutoRegister(available_agents), ABC):
@@ -51,5 +50,5 @@ class BaseAgent(AutoRegister(available_agents), ABC):
             llm=self.llm,
             memory=self.memory,
             system_prompt=self.system_prompt,
-            verbose=True
+            verbose=True,
         )

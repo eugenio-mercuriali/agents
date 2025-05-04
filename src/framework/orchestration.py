@@ -1,15 +1,17 @@
 import logging
+from typing import Optional
 
 from src.agents.base import BaseAgent
 from src.foundation.llm import LLM
 from src.register.registries import available_agents
-from typing import Optional
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 class Orchestrator:
     """Task assistant system."""
+
     def __init__(self, llm: LLM, agents: Optional[dict[str, BaseAgent]] = None):
         self.llm = llm
         self.agents = self._init_agents if not agents else agents

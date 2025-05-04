@@ -1,6 +1,8 @@
-from .base import BaseAgent
-from typing import ClassVar, Any
 from datetime import datetime
+from typing import Any, ClassVar
+
+from .base import BaseAgent
+
 
 class EmailAgent(BaseAgent):
     """
@@ -9,7 +11,9 @@ class EmailAgent(BaseAgent):
 
     agent_name: ClassVar[str] = "email"
 
-    def _draft_email(self, to: str, subject: str, content: str, cc: list[str] = None) -> dict[str, Any]:
+    def _draft_email(
+        self, to: str, subject: str, content: str, cc: list[str] = None
+    ) -> dict[str, Any]:
         """
         Draft an email based on provided content.
 
@@ -31,7 +35,7 @@ class EmailAgent(BaseAgent):
             "content": content,
             "cc": cc,
             "created_at": datetime.now().isoformat(),
-            "status": "draft"
+            "status": "draft",
         }
 
         # Store in shared memory
@@ -67,5 +71,5 @@ class EmailAgent(BaseAgent):
         return {
             "priority": "high" if "urgent" in email_content.lower() else "normal",
             "category": "work" if "project" in email_content.lower() else "personal",
-            "needs_response": "yes" if "?" in email_content else "no"
+            "needs_response": "yes" if "?" in email_content else "no",
         }

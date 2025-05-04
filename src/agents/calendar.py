@@ -1,13 +1,13 @@
-from src.agents.base import BaseAgent
-from typing import Any, ClassVar
 from datetime import datetime
+from typing import Any, ClassVar
+
+from src.agents.base import BaseAgent
 
 
 class CalendarAgent(BaseAgent):
     """Manages scheduling and time-based activities."""
 
     agent_name: ClassVar[str] = "calendar"
-
 
     def _check_availability(self, start_time: str, end_time: str) -> dict[str, Any]:
         """
@@ -29,10 +29,12 @@ class CalendarAgent(BaseAgent):
         return {
             "available": available,
             "conflicts": conflicts,
-            "time_slot": f"{start_time} to {end_time}"
+            "time_slot": f"{start_time} to {end_time}",
         }
 
-    def _schedule_event(self, title: str, start_time: str, end_time: str, description: str = "") -> dict[str, Any]:
+    def _schedule_event(
+        self, title: str, start_time: str, end_time: str, description: str = ""
+    ) -> dict[str, Any]:
         """
         Schedule an event on the calendar.
 
@@ -55,7 +57,7 @@ class CalendarAgent(BaseAgent):
             "start_time": start_time,
             "end_time": end_time,
             "description": description,
-            "created_at": datetime.now().isoformat()
+            "created_at": datetime.now().isoformat(),
         }
 
         # Store in shared memory

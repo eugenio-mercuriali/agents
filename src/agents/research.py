@@ -1,5 +1,6 @@
-from .base import BaseAgent
 from typing import ClassVar
+
+from src.agents.base import BaseAgent
 
 
 class ResearchAgent(BaseAgent):
@@ -17,7 +18,7 @@ class ResearchAgent(BaseAgent):
         2. Synthesize data from multiple sources
         3. Present findings in a clear, structured way
         4. Identify key insights and patterns
-        
+
         Always cite sources and verify information when possible.
         """
         return system_prompt

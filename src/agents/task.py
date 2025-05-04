@@ -1,5 +1,7 @@
 from typing import ClassVar
+
 from llama_index.core.tools import FunctionTool, QueryEngineTool
+
 from src.agents.base import BaseAgent
 
 
@@ -27,17 +29,17 @@ class TaskAgent(BaseAgent):
             FunctionTool.from_defaults(
                 fn=self._execute_task,
                 name="execute_task",
-                description="Execute a specific defined task"
+                description="Execute a specific defined task",
             ),
             FunctionTool.from_defaults(
                 fn=self._check_task_status,
                 name="check_task_status",
-                description="Check the status of a task"
+                description="Check the status of a task",
             ),
             FunctionTool.from_defaults(
                 fn=self._report_task_result,
                 name="report_task_result",
-                description="Report the result of a completed task"
+                description="Report the result of a completed task",
             ),
         ]
 
@@ -49,7 +51,7 @@ class TaskAgent(BaseAgent):
             QueryEngineTool.from_defaults(
                 query_engine=query_engine,
                 name="task_knowledge",
-                description="Query knowledge base for task execution methodologies"
+                description="Query knowledge base for task execution methodologies",
             )
         )
 

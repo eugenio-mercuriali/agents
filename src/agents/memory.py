@@ -1,9 +1,11 @@
-from src.agents.base import BaseAgent
-from typing import Any, ClassVar
-from llama_index.core import Document
-from datetime import datetime
-from llama_index.core.tools import FunctionTool, QueryEngineTool
 import json
+from datetime import datetime
+from typing import Any, ClassVar
+
+from llama_index.core import Document
+from llama_index.core.tools import FunctionTool, QueryEngineTool
+
+from src.agents.base import BaseAgent
 
 
 class MemoryAgent(BaseAgent):
@@ -36,17 +38,17 @@ class MemoryAgent(BaseAgent):
             FunctionTool.from_defaults(
                 fn=self._store_memory,
                 name="store_memory",
-                description="Store information in long-term memory"
+                description="Store information in long-term memory",
             ),
             FunctionTool.from_defaults(
                 fn=self._retrieve_memory,
                 name="retrieve_memory",
-                description="Retrieve information from memory based on query"
+                description="Retrieve information from memory based on query",
             ),
             FunctionTool.from_defaults(
                 fn=self._update_memory,
                 name="update_memory",
-                description="Update existing memory with new information"
+                description="Update existing memory with new information",
             ),
         ]
 
@@ -58,12 +60,11 @@ class MemoryAgent(BaseAgent):
             QueryEngineTool.from_defaults(
                 query_engine=query_engine,
                 name="memory_query",
-                description="Query semantic memory database for relevant information"
+                description="Query semantic memory database for relevant information",
             )
         )
 
         return tools
-
 
     def _store_memory(self, content: str, tags: list[str] = None) -> str:
         """
@@ -83,7 +84,10 @@ class MemoryAgent(BaseAgent):
 
         # TODO: index doc properly
         # Create a document for vector storage
-        doc = Document(text=content, metadata={"tags": tags, "created_at": datetime.now().isoformat()})
+        doc = Document(
+            text=content,
+            metadata={"tags": tags, "created_at": datetime.now().isoformat()},
+        )
 
         # Get the memory collection
         collection = self.chroma_client.get_or_create_collection("memory_store")
@@ -93,8 +97,10 @@ class MemoryAgent(BaseAgent):
         collection.add(
             ids=[memory_id],
             embeddings=[embedding],
-            metadatas=[{"tags": json.dumps(tags), "created_at": datetime.now().isoformat()}],
-            documents=[content]
+            metadatas=[
+                {"tags": json.dumps(tags), "created_at": datetime.now().isoformat()}
+            ],
+            documents=[content],
         )
 
         return memory_id
@@ -117,19 +123,22 @@ class MemoryAgent(BaseAgent):
         embedding = self.embed_model.get_text_embedding(query)
 
         # Search
-        results = collection.query(
-            query_embeddings=[embedding],
-            n_results=top_k
-        )
+        results = collection.query(query_embeddings=[embedding], n_results=top_k)
 
         # Format results
         memories = []
         for i in range(len(results["ids"][0])):
-            memories.append({
-                "id": results["ids"][0][i],
-                "content": results["documents"][0][i],
-                "metadata": json.loads(results["metadatas"][0][i]["tags"]) if "tags" in results["metadatas"][0][i] else {}
-            })
+            memories.append(
+                {
+                    "id": results["ids"][0][i],
+                    "content": results["documents"][0][i],
+                    "metadata": (
+                        json.loads(results["metadatas"][0][i]["tags"])
+                        if "tags" in results["metadatas"][0][i]
+                        else {}
+                    ),
+                }
+            )
 
         return memories
 
@@ -153,10 +162,8 @@ class MemoryAgent(BaseAgent):
         # Update the document
         try:
             collection.update(
-                ids=[memory_id],
-                embeddings=[embedding],
-                documents=[new_content]
+                ids=[memory_id], embeddings=[embedding], documents=[new_content]
             )
             return f"Memory {memory_id} updated successfully"
         except Exception as e:
-            return f"Error updating memory: {str(e)}"
+            return f"Error updating memory: {e!s}"

@@ -4,20 +4,21 @@ pip install openai llama-index-llms-openai llama-index-llms-huggingface
 pip install llama-index-llms-ollama llama-index-llms-together llama-index-llms-litellm
 """
 
-from src.agents.planning import PlanningAgent
 from src.agents.calendar import CalendarAgent
 from src.agents.email import EmailAgent
-from src.agents.research import ResearchAgent
 from src.agents.memory import MemoryAgent
+from src.agents.planning import PlanningAgent
+from src.agents.research import ResearchAgent
 from src.agents.task import TaskAgent
-from src.framework.llamaindex import LlamaIndexFramework
-from src.framework.orchestration import Orchestrator
-from src.framework.shared_memory import SharedMemory
-from src.foundation.llm import LLM
-from src.db.chroma import ChromaDB
 from src.api.calendar import CalendarAPI
 from src.api.email import EmailAPI
 from src.api.web_search import WebSearchAPI
+from src.db.chroma import ChromaDB
+from src.foundation.llm import LLM
+from src.framework.llamaindex import LlamaIndexFramework
+from src.framework.orchestration import Orchestrator
+from src.framework.shared_memory import SharedMemory
+
 
 def main():
     # Initialize core components
@@ -46,6 +47,7 @@ def main():
     task = {"type": "schedule_meeting", "details": "..."}
     context = {}
     orchestrator.process_user_request(task, context)
+
 
 if __name__ == "__main__":
     main()
