@@ -1,4 +1,4 @@
-from .base import BaseAgent
+from src.agents.base import BaseAgent
 from typing import Any, ClassVar
 from datetime import datetime
 
